@@ -99,8 +99,8 @@ for i, sentence in enumerate(adwentures_of_tom_sawer_sentences, start=1):
     if sentence.startswith("By the time"):
         print(f'Речення {i} починається з фрази \"By the time\"')
         # n = 1
-    else:
-        print(f'Речення {i} не починається з фрази \"By the time\"')
+    # else:
+    #     print(f'Речення {i} не починається з фрази \"By the time\"')
 # if  n != 1:
 #     print(f'Жодне з речень не починається з фрази \"By the time\"')
 
