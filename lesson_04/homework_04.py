@@ -59,7 +59,7 @@ print("Task 5")
 string = adwentures.split()
 num = 0
 for word in string:
-    if word.istitle():
+    if word.lstrip().istitle():
         num += 1
 print(f'Кількість слів в тексті, що починаються з великої літери - {num}')
 
@@ -94,13 +94,15 @@ print(adwentures_of_tom_sawer_sentences[3].lower())
 """
 print("--------")
 print("Task 9")
-n = 0
-for sentence in adwentures_of_tom_sawer_sentences:
+# n = 0
+for i, sentence in enumerate(adwentures_of_tom_sawer_sentences, start=1):
     if sentence.startswith("By the time"):
-        print(f'Присутнє речення, що починається з фрази \"By the time\"')
-        n = 1
-if  n != 1:
-    print(f'Жодне з речень не починається з фрази \"By the time\"')
+        print(f'Речення {i} починається з фрази \"By the time\"')
+        # n = 1
+    else:
+        print(f'Речення {i} не починається з фрази \"By the time\"')
+# if  n != 1:
+#     print(f'Жодне з речень не починається з фрази \"By the time\"')
 
 # task 10
 """ Виведіть кількість слів останнього речення з adwentures_of_tom_sawer_sentences.
