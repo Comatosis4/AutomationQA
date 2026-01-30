@@ -20,9 +20,20 @@ class TeamLead(Manager, Developer):
         Developer.__init__(self, name, salary, programming_language)
         self.team_size = team_size
 
+    def test_atr(self):
+        assert hasattr(self, "programming_language"), "Missing attribute: programming_language"
+        print(self.programming_language)
+        assert hasattr(self, "department"), "Missing attribute: department"
+        print(self.department)
+        assert hasattr(self, "name"), "Missing attribute: name"
+        print(self.name)
+        assert hasattr(self, "salary"), "Missing attribute: salary"
+        print(self.salary)
+        assert hasattr(self, "team_size"), "Missing attribute: team_size"
+        print(self.team_size)
+
+
 dev = Developer('Bob', 20000, 'Python')
 manager = Manager('Tom', 21000, 'QA')
 lead = TeamLead(dev.name, manager.salary, manager.department, dev.programming_language, 3)
-print(lead.team_size)
-print(lead.department)
-print(lead.name)
+lead.test_atr()
