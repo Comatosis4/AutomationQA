@@ -1,6 +1,11 @@
-class Figure:
+from abc import ABC, abstractmethod
+
+
+class Figure(ABC):
+    @abstractmethod
     def perimeter(self):
         pass
+    @abstractmethod
     def area(self):
         pass
 
