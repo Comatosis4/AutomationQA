@@ -73,20 +73,20 @@ def get_gender(first_name):
 	return gender
 
 def get_country(first_name = None):
-	countryFile = csv.reader(open(full_path('data.csv'), 'r'))
+	countryFile = csv.reader(open(full_path('../data_fix.csv'), 'r'))
 	country = ""
 	if first_name != None:
 		for data in countryFile:
 			if data[0] != '' and data[0] == first_name:
-				country = data[3]
+				country = data[10]
 				break
 		if country == "":
 			print("Specified user data is not available. Tip: Generate random country.")
 	else:
 		filteredData = []
 		for data in countryFile:
-			if data[12] != '':
-				filteredData.append(data[12])
+			if data[11] != '':
+				filteredData.append(data[11])
 		country = choice(filteredData)
 	return country
 
@@ -259,18 +259,18 @@ def get_birthdate(startAge = None, endAge = None, _format = "%d %b, %Y"):
 
 def get_address():
 	full_addr = []
-	addrParam = ['street', 'landmark', 'area', 'city', 'state', 'country', 'pincode']
-	for i in range(5,12):
-		addrFile = csv.reader(open(full_path('data.csv'), 'r'))
-		allAddrs = []
-		for addr in addrFile:
+	addrparam = ['street', 'landmark', 'area', 'city', 'state', 'pincode', 'country']
+	for i in range(4,11):
+		addrfile = csv.reader(open(full_path('../data_fix.csv'), 'r'))
+		alladdrs = []
+		for addr in addrfile:
 			try:
 				if addr[i] != '':
-					allAddrs.append(addr[i])
+					alladdrs.append(addr[i])
 			except:
 				pass
-		full_addr.append(choice(allAddrs))
-	full_addr = dict(zip(addrParam, full_addr))
+		full_addr.append(choice(alladdrs))
+	full_addr = dict(zip(addrparam, full_addr))
 	return full_addr
 
 def get_hobbies():
