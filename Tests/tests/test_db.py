@@ -1,80 +1,105 @@
 import pytest
+import allure
 
 
+@allure.feature("Database connection")
 @pytest.mark.db_test
 def test_database_connection(conn):
-    assert conn is not None
+
+    with allure.step("Check database connection exists"):
+        assert conn is not None
 
 
+@allure.feature("Database CRUD")
 @pytest.mark.db_test
 def test_data_insertion(cursor_con):
 
     cursor, conn = cursor_con
 
-    cursor.execute(
-        "INSERT INTO users (name) VALUES ('John') RETURNING id"
-    )
+    with allure.step("Insert new user"):
 
-    user_id = cursor.fetchone()[0]
+        cursor.execute(
+            "INSERT INTO users (name) VALUES ('John') RETURNING id"
+        )
 
-    cursor.execute(
-        "SELECT name FROM users WHERE id = %s",
-        (user_id,)
-    )
+        user_id = cursor.fetchone()[0]
 
-    result = cursor.fetchone()
+    with allure.step("Select inserted user"):
 
-    assert result is not None
-    assert result[0] == 'John'
+        cursor.execute(
+            "SELECT name FROM users WHERE id = %s",
+            (user_id,)
+        )
+
+        result = cursor.fetchone()
+
+    with allure.step("Verify inserted data"):
+
+        assert result is not None
+        assert result[0] == "John"
 
 
+@allure.feature("Database CRUD")
 @pytest.mark.db_test
 def test_update(cursor_con):
 
     cursor, conn = cursor_con
 
-    cursor.execute(
-        "INSERT INTO users (name) VALUES ('Mike') RETURNING id"
-    )
+    with allure.step("Insert user for update"):
 
-    user_id = cursor.fetchone()[0]
+        cursor.execute(
+            "INSERT INTO users (name) VALUES ('Mike') RETURNING id"
+        )
 
-    cursor.execute(
-        "UPDATE users SET name='Updated' WHERE id=%s",
-        (user_id,)
-    )
+        user_id = cursor.fetchone()[0]
 
-    cursor.execute(
-        "SELECT name FROM users WHERE id=%s",
-        (user_id,)
-    )
+    with allure.step("Update user name"):
 
-    result = cursor.fetchone()
+        cursor.execute(
+            "UPDATE users SET name='Updated' WHERE id=%s",
+            (user_id,)
+        )
 
-    assert result[0] == "Updated"
+    with allure.step("Verify updated data"):
+
+        cursor.execute(
+            "SELECT name FROM users WHERE id=%s",
+            (user_id,)
+        )
+
+        result = cursor.fetchone()
+
+        assert result[0] == "Updated"
 
 
+@allure.feature("Database CRUD")
 @pytest.mark.db_test
 def test_delete(cursor_con):
 
     cursor, conn = cursor_con
 
-    cursor.execute(
-        "INSERT INTO users (name) VALUES ('DeleteMe') RETURNING id"
-    )
+    with allure.step("Insert user for delete"):
 
-    user_id = cursor.fetchone()[0]
+        cursor.execute(
+            "INSERT INTO users (name) VALUES ('DeleteMe') RETURNING id"
+        )
 
-    cursor.execute(
-        "DELETE FROM users WHERE id=%s",
-        (user_id,)
-    )
+        user_id = cursor.fetchone()[0]
 
-    cursor.execute(
-        "SELECT name FROM users WHERE id=%s",
-        (user_id,)
-    )
+    with allure.step("Delete user"):
 
-    result = cursor.fetchone()
+        cursor.execute(
+            "DELETE FROM users WHERE id=%s",
+            (user_id,)
+        )
 
-    assert result is None
+    with allure.step("Verify deletion"):
+
+        cursor.execute(
+            "SELECT name FROM users WHERE id=%s",
+            (user_id,)
+        )
+
+        result = cursor.fetchone()
+
+        assert result is None

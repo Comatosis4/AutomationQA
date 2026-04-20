@@ -11,33 +11,28 @@ load_dotenv()
 @pytest.fixture(scope="session")
 def conn():
 
-    time.sleep(5)  # чекати запуск postgres
+    retries = 10
+    connection = None
 
-    try:
-        connection = psycopg2.connect(
-            dbname=os.getenv("DB_NAME"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            host=os.getenv("DB_HOST"),
-            port=os.getenv("DB_PORT")
-        )
+    for i in range(retries):
+        try:
+            connection = psycopg2.connect(
+                dbname=os.getenv("DB_NAME"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD"),
+                host=os.getenv("DB_HOST"),
+                port=os.getenv("DB_PORT")
+            )
 
-        print("Connected to the database successfully!")
+            print("Connected to the database successfully!")
+            break
 
-        cursor = connection.cursor()
+        except Exception as error:
+            print(f"Attempt {i + 1}: Database not ready, waiting...")
+            time.sleep(3)
 
-        # створюємо таблицю
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id SERIAL PRIMARY KEY,
-            name TEXT
-        )
-        """)
-
-        connection.commit()
-
-    except Exception as error:
-        pytest.fail(f"Error while connecting to PostgreSQL: {error}")
+    if connection is None:
+        pytest.fail("Could not connect to PostgreSQL after several attempts")
 
     yield connection
 
@@ -51,7 +46,15 @@ def cursor_con(conn):
 
     cursor = conn.cursor()
 
-    yield cursor, conn
+    cursor.execute("""
+                   CREATE TABLE IF NOT EXISTS users ( 
+                        id SERIAL PRIMARY KEY, 
+                        name TEXT)
+                """)
 
     conn.commit()
+
+    yield cursor, conn
+
+    conn.rollback()
     cursor.close()
