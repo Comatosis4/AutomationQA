@@ -1,3 +1,4 @@
+
 pipeline {
 
     agent any
@@ -6,43 +7,38 @@ pipeline {
 
         stage('Checkout code') {
             steps {
-                git 'https://github.com/yourname/your-repo.git'
+                git 'https://github.com/Comatosis4/AutomationQA.git'
             }
         }
 
-        stage('Build containers') {
+        stage('Install dependencies') {
             steps {
-                bat 'docker compose down -v'
-                bat 'docker compose build'
+                sh 'python3 -m pip install --upgrade pip'
+                sh 'pip install -r requirements.txt'
             }
         }
 
         stage('Run tests') {
             steps {
-                bat 'docker compose up --abort-on-container-exit'
+                sh 'pytest -v --junitxml=report.xml'
             }
         }
 
         stage('Collect results') {
             steps {
-                archiveArtifacts artifacts: 'allure-results/**'
+                junit 'report.xml'
             }
         }
-
     }
 
     post {
 
         always {
-
             emailext(
-                subject: "Test Result: ${currentBuild.currentResult}",
-                body: "Pipeline finished",
-                to: "InsertYour@Mail.Here"
+                subject: "Jenkins Test Result: ${currentBuild.currentResult}",
+                body: "Pipeline finished. Check Jenkins for details.",
+                to: "oleg.cherniai@gmail.com"
             )
-
         }
-
     }
-
 }
