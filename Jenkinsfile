@@ -5,11 +5,7 @@ pipeline {
 
     stages {
 
-        stage('Checkout code') {
-            steps {
-                git 'https://github.com/Comatosis4/AutomationQA.git'
-            }
-        }
+
 
         stage('Install dependencies') {
             steps {
