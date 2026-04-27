@@ -1,34 +1,32 @@
-
-pipeline {
+     pipeline {
 
     agent any
 
     stages {
 
-
-
         stage('Install dependencies') {
             steps {
-                sh 'python3 -m pip install --upgrade pip'
-                sh 'pip install -r requirements.txt'
+                sh 'python --version'
+                sh 'python -m pip install --upgrade pip'
+                sh 'python -m pip install -r requirements.txt'
             }
         }
 
         stage('Run tests') {
             steps {
+                sh 'python -m pip install pytest'
                 sh 'pytest -v --junitxml=report.xml'
             }
         }
 
         stage('Collect results') {
             steps {
-                junit 'report.xml'
+                junit allowEmptyResults: true, testResults: 'report.xml'
             }
         }
     }
 
     post {
-
         always {
             emailext(
                 subject: "Jenkins Test Result: ${currentBuild.currentResult}",
