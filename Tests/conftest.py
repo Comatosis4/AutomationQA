@@ -1,7 +1,7 @@
 import os
 import time
 
-import psycopg2
+# import psycopg2
 import pytest
 from dotenv import load_dotenv
 
