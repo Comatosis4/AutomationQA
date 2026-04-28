@@ -1,4 +1,4 @@
-     pipeline {
+pipeline {
 
     agent any
 
@@ -6,16 +6,16 @@
 
         stage('Install dependencies') {
             steps {
-                sh 'python --version'
-                sh 'python -m pip install --upgrade pip'
-                sh 'python -m pip install -r requirements.txt'
+                bat 'python --version'
+                bat 'python -m pip install --upgrade pip'
+                bat 'python -m pip install -r requirements.txt'
             }
         }
 
         stage('Run tests') {
             steps {
-                sh 'python -m pip install pytest'
-                sh 'pytest -v --junitxml=report.xml'
+                bat 'python -m pip install pytest'
+                bat 'pytest -v --junitxml=report.xml'
             }
         }
 
