@@ -15,7 +15,7 @@ pipeline {
         stage('Run tests') {
             steps {
                 bat 'python -m pip install pytest'
-                bat 'python -m pytest test_calculator.py -v --junitxml=report.xml'
+                bat 'python -m pytest Tests/test_calculator.py -v --junitxml=report.xml'
             }
         }
 
